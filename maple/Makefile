@@ -21,10 +21,12 @@ SOURCES := MapleStoryClient.cpp
 VERSION_H := $(OUT_DIR)/MapleStoryClient_version.h
 VERSION_RC := $(OUT_DIR)/MapleStoryClient_version.rc
 VERSION_O := $(OUT_DIR)/MapleStoryClient_version.o
+VERSION_TXT := $(OUT_DIR)/MapleStoryClient_version.txt
 
 # 기본 타겟 (Release)
 all: $(OUT_DIR) $(VERSION_H) $(VERSION_RC) $(VERSION_O)
 	$(CXX) $(CXXFLAGS_RELEASE) -o $(TARGET) $(SOURCES) $(VERSION_O) $(LIBS)
+	@copy MapleStoryClient_version.txt "public\downloads\MapleStoryClient_version.txt"
 	@echo ========================================
 	@echo Build complete! [RELEASE] Version: $(VERSION)
 	@echo Output: $(TARGET)
@@ -33,6 +35,7 @@ all: $(OUT_DIR) $(VERSION_H) $(VERSION_RC) $(VERSION_O)
 # Debug 빌드
 debug: $(OUT_DIR) $(VERSION_H) $(VERSION_RC) $(VERSION_O)
 	$(CXX) $(CXXFLAGS_DEBUG) -o $(TARGET) $(SOURCES) $(VERSION_O) $(LIBS)
+	@copy MapleStoryClient_version.txt "public\downloads\MapleStoryClient_version.txt"
 	@echo ========================================
 	@echo Build complete! [DEBUG] Version: $(VERSION)
 	@echo Output: $(TARGET)
@@ -103,10 +106,11 @@ run-debug:
 
 # 정리
 clean:
-	@if exist $(VERSION_H) del $(VERSION_H)
-	@if exist $(VERSION_RC) del $(VERSION_RC)
-	@if exist $(VERSION_O) del $(VERSION_O)
-	@if exist $(TARGET) del $(TARGET)
+	-@del "public\downloads\MapleStoryClient_version.h" 2>nul
+	-@del "public\downloads\MapleStoryClient_version.rc" 2>nul
+	-@del "public\downloads\MapleStoryClient_version.o" 2>nul
+	-@del "public\downloads\MapleStoryClient_version.txt" 2>nul
+	-@del "public\downloads\MapleStoryClient.exe" 2>nul
 	@echo Clean complete!
 
 # 재빌드

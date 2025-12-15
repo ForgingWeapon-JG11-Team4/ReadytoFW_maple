@@ -37,6 +37,11 @@ std::string getLatestVersionRemote(const std::string& url) {
     HINTERNET hInternet = InternetOpenA("VersionChecker", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
     if (!hInternet) return "";
     
+    DWORD timeout = 5000;
+    InternetSetOptionA(hInternet, INTERNET_OPTION_CONNECT_TIMEOUT, &timeout, sizeof(timeout));  // 연결 타임아웃
+    InternetSetOptionA(hInternet, INTERNET_OPTION_RECEIVE_TIMEOUT, &timeout, sizeof(timeout));  // 수신 타임아웃
+    InternetSetOptionA(hInternet, INTERNET_OPTION_SEND_TIMEOUT, &timeout, sizeof(timeout));     // 송신 타임아웃
+
     HINTERNET hConnect = InternetOpenUrlA(hInternet, url.c_str(), NULL, 0, INTERNET_FLAG_RELOAD, 0);
     if (!hConnect) {
         InternetCloseHandle(hInternet);
@@ -62,8 +67,8 @@ std::string getLatestVersionRemote(const std::string& url) {
 
 std::string getLatestVersion() {
 #ifdef DEBUG
-    std::cout << "[DEBUG] Using local version file" << std::endl;
-    return getLatestVersionLocal("MapleStoryClient_version.txt");
+    std::cout << "[DEBUG] Using localhost server" << std::endl;
+    return getLatestVersionRemote("http://localhost:3000/downloads/MapleStoryClient_version.txt");
 #else
     return getLatestVersionRemote("https://your-server.com/version.txt");
 #endif
@@ -82,7 +87,11 @@ int compareVersion(const std::string& a, const std::string& b) {
 }
 
 void openDownloadPage() {
+#ifdef DEBUG
+    ShellExecuteA(NULL, "open", "http://localhost:3000", NULL, NULL, SW_SHOWNORMAL);
+#else
     ShellExecuteA(NULL, "open", "https://your-server.com/download", NULL, NULL, SW_SHOWNORMAL);
+#endif
 }
 
 const std::string mushroomAsciiArt = R"(
@@ -175,12 +184,12 @@ int main() {
         
         char choice;
         std::cin >> choice;
+        std::cin.ignore(10000, '\n');
         
         if (choice == 'Y' || choice == 'y') {
             openDownloadPage();
-            std::cout << "Press Enter to exit...";
-            std::cin.ignore();
-            std::cin.get();
+            std::cout << "Opening download page..." << std::endl;
+            system("pause");
             return 0;
         }
     } 

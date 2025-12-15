@@ -2,6 +2,6 @@
 #define VERSION_H 
 #define VERSION_MAJOR 0 
 #define VERSION_MINOR 0 
-#define VERSION_PATCH 3 
-#define VERSION_STRING "0.0.3" 
+#define VERSION_PATCH 4 
+#define VERSION_STRING "0.0.4" 
 #endif 

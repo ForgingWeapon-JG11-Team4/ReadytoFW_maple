@@ -119,15 +119,30 @@ function NoticeSection() {
 
 // 5. 로그인 박스 컴포넌트
 function LoginBox() {
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = '/downloads/MapleStoryClient.exe';
+    link.download = 'MapleStoryClient.exe';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleGameStart = () => {
+    // 커스텀 프로토콜로 실행 시도
+    window.location.href = "maplestory://launch";
+  };
+
   return (
     <div className="login-box">
       {/* Game Start 버튼 */}
-      <div className="game-start-btn">
+      <div className="game-start-btn" onClick={handleGameStart}>
         <div className="game-start-inner">
           GAME<br/>START
         </div>
       </div>
-      <div className="download-btn">
+      
+      <div className="download-btn" onClick={handleDownload}>
         다운로드 <span className="download-arrow">▼</span>
       </div>
       
@@ -144,7 +159,6 @@ function LoginBox() {
     </div>
   );
 }
-
 // 6. 업데이트 정보 컴포넌트
 function UpdateInfo() {
   const [currentMystic, setCurrentMystic] = useState(2);
