@@ -2,14 +2,12 @@
 #include <string>
 #include "MapleStoryClient_version.h"
 
-/* 버전: 0.0.1
- * 
- * 컴파일
- * 
- * 
- * 
- * 실행
- * 
+/* Version 0.0.2
+ *
+ * Compile       >> make
+ * Clean         >> make clean
+ * Version check >> make version
+ * Execution     >> make run
  */
 
 
