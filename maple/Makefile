@@ -10,7 +10,9 @@ PATCH := $(word 3,$(subst ., ,$(VERSION)))
 # 컴파일러 설정
 CXX := g++
 WINDRES := windres
-CXXFLAGS := -Wall -O2 -I$(OUT_DIR)
+CXXFLAGS_BASE := -Wall -I$(OUT_DIR)
+CXXFLAGS_RELEASE := $(CXXFLAGS_BASE) -O2
+CXXFLAGS_DEBUG := $(CXXFLAGS_BASE) -g -DDEBUG
 LIBS := -lwininet
 
 # 파일명
@@ -20,20 +22,23 @@ VERSION_H := $(OUT_DIR)/MapleStoryClient_version.h
 VERSION_RC := $(OUT_DIR)/MapleStoryClient_version.rc
 VERSION_O := $(OUT_DIR)/MapleStoryClient_version.o
 
-# 기본 타겟
-all: $(OUT_DIR) $(VERSION_H) $(VERSION_RC) $(TARGET)
+# 기본 타겟 (Release)
+all: $(OUT_DIR) $(VERSION_H) $(VERSION_RC) $(VERSION_O)
+	$(CXX) $(CXXFLAGS_RELEASE) -o $(TARGET) $(SOURCES) $(VERSION_O) $(LIBS)
 	@echo ========================================
-	@echo Build complete! Version: $(VERSION)
-	@echo Output: $(TARGET)
+	@echo Build complete! [RELEASE] Version: $(VERSION)
+	@echo ========================================
+
+# Debug 빌드
+debug: $(OUT_DIR) $(VERSION_H) $(VERSION_RC) $(VERSION_O)
+	$(CXX) $(CXXFLAGS_DEBUG) -o $(TARGET) $(SOURCES) $(VERSION_O) $(LIBS)
+	@echo ========================================
+	@echo Build complete! [DEBUG] Version: $(VERSION)
 	@echo ========================================
 
 # 출력 폴더 생성
 $(OUT_DIR):
 	@if not exist $(OUT_DIR) mkdir $(OUT_DIR)
-
-# 실행파일 생성
-$(TARGET): $(SOURCES) $(VERSION_O) $(VERSION_H)
-	$(CXX) $(CXXFLAGS) -o $@ $(SOURCES) $(VERSION_O) $(LIBS)
 
 # 리소스 컴파일
 $(VERSION_O): $(VERSION_RC) $(VERSION_H)
@@ -84,10 +89,17 @@ $(VERSION_RC): MapleStoryClient_version.txt $(OUT_DIR)
 	@echo     END >> $@
 	@echo END >> $@
 
-# 실행
-run:
+# 실행 (Release)
+run: all
 	@echo ========================================
-	@echo Running $(TARGET)...
+	@echo Running [RELEASE]...
+	@echo ========================================
+	@$(TARGET)
+
+# 실행 (Debug)
+run-debug: debug
+	@echo ========================================
+	@echo Running [DEBUG]...
 	@echo ========================================
 	@$(TARGET)
 
@@ -102,6 +114,8 @@ clean:
 # 재빌드
 rebuild: clean all
 
+rebuild-debug: clean debug
+
 # 버전 확인
 version:
 	@echo VERSION: $(VERSION)
@@ -109,4 +123,4 @@ version:
 	@echo MINOR: $(MINOR)
 	@echo PATCH: $(PATCH)
 
-.PHONY: all clean rebuild version
+.PHONY: all debug clean rebuild rebuild-debug version run run-debug
