@@ -1,5 +1,5 @@
 # 폴더 설정
-OUT_DIR := client
+OUT_DIR := public/downloads
 
 # 버전 정보 읽기
 VERSION := $(shell findstr . MapleStoryClient_version.txt)
@@ -27,6 +27,7 @@ all: $(OUT_DIR) $(VERSION_H) $(VERSION_RC) $(VERSION_O)
 	$(CXX) $(CXXFLAGS_RELEASE) -o $(TARGET) $(SOURCES) $(VERSION_O) $(LIBS)
 	@echo ========================================
 	@echo Build complete! [RELEASE] Version: $(VERSION)
+	@echo Output: $(TARGET)
 	@echo ========================================
 
 # Debug 빌드
@@ -34,11 +35,12 @@ debug: $(OUT_DIR) $(VERSION_H) $(VERSION_RC) $(VERSION_O)
 	$(CXX) $(CXXFLAGS_DEBUG) -o $(TARGET) $(SOURCES) $(VERSION_O) $(LIBS)
 	@echo ========================================
 	@echo Build complete! [DEBUG] Version: $(VERSION)
+	@echo Output: $(TARGET)
 	@echo ========================================
 
 # 출력 폴더 생성
 $(OUT_DIR):
-	@if not exist $(OUT_DIR) mkdir $(OUT_DIR)
+	@if not exist "public\downloads" mkdir "public\downloads"
 
 # 리소스 컴파일
 $(VERSION_O): $(VERSION_RC) $(VERSION_H)
@@ -91,24 +93,20 @@ $(VERSION_RC): MapleStoryClient_version.txt $(OUT_DIR)
 
 # 실행 (Release)
 run: all
-	@echo ========================================
 	@echo Running [RELEASE]...
-	@echo ========================================
 	@$(TARGET)
 
 # 실행 (Debug)
 run-debug: debug
-	@echo ========================================
 	@echo Running [DEBUG]...
-	@echo ========================================
 	@$(TARGET)
 
 # 정리
 clean:
-	@if exist $(OUT_DIR)\MapleStoryClient_version.h del $(OUT_DIR)\MapleStoryClient_version.h
-	@if exist $(OUT_DIR)\MapleStoryClient_version.rc del $(OUT_DIR)\MapleStoryClient_version.rc
-	@if exist $(OUT_DIR)\MapleStoryClient_version.o del $(OUT_DIR)\MapleStoryClient_version.o
-	@if exist $(OUT_DIR)\MapleStoryClient.exe del $(OUT_DIR)\MapleStoryClient.exe
+	@if exist $(VERSION_H) del $(VERSION_H)
+	@if exist $(VERSION_RC) del $(VERSION_RC)
+	@if exist $(VERSION_O) del $(VERSION_O)
+	@if exist $(TARGET) del $(TARGET)
 	@echo Clean complete!
 
 # 재빌드
@@ -119,8 +117,6 @@ rebuild-debug: clean debug
 # 버전 확인
 version:
 	@echo VERSION: $(VERSION)
-	@echo MAJOR: $(MAJOR)
-	@echo MINOR: $(MINOR)
-	@echo PATCH: $(PATCH)
+	@echo OUTPUT: $(TARGET)
 
 .PHONY: all debug clean rebuild rebuild-debug version run run-debug
