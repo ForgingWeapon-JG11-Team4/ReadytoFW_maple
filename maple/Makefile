@@ -92,12 +92,12 @@ $(VERSION_RC): MapleStoryClient_version.txt $(OUT_DIR)
 	@echo END >> $@
 
 # 실행 (Release)
-run: all
+run:
 	@echo Running [RELEASE]...
 	@$(TARGET)
 
 # 실행 (Debug)
-run-debug: debug
+run-debug:
 	@echo Running [DEBUG]...
 	@$(TARGET)
 
