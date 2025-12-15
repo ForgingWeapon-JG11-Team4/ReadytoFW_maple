@@ -5,11 +5,11 @@
 /* 버전: 0.0.1
  * 
  * 컴파일
- * windres MapleStoryClient_version.rc -o MapleStoryClient_version.o
- * g++ -o MapleStoryClient.exe MapleStoryClient.cpp MapleStoryClient_version.o
+ * 
+ * 
  * 
  * 실행
- * MapleStoryClient.exe
+ * 
  */
 
 
