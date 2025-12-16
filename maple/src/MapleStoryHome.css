@@ -378,10 +378,16 @@
   cursor: pointer;
   margin-bottom: 20px;
   transition: background 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .login-btn:hover {
   background: linear-gradient(180deg, #717171 0%, #616161 100%);
+}
+
+.login-btn.signup {
+  margin-top: 0;
 }
 
 .login-links {
