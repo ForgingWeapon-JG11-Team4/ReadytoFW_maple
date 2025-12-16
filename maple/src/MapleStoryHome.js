@@ -129,8 +129,27 @@ function LoginBox() {
   };
 
   const handleGameStart = () => {
-    // 커스텀 프로토콜로 실행 시도
+    let launched = false;
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        launched = true;
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+
     window.location.href = "maplestory://launch";
+
+    setTimeout(() => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      
+      if (!launched) {
+        if (window.confirm("클라이언트가 설치되어 있지 않습니다.\n다운로드하시겠습니까?")) {
+          handleDownload();
+        }
+      }
+    }, 2000);
   };
 
   return (
