@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './MapleStoryHome.css';
 
 // ========================================
@@ -152,6 +153,8 @@ function LoginBox() {
     }, 2000);
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="login-box">
       {/* Game Start 버튼 */}
@@ -167,14 +170,13 @@ function LoginBox() {
       
       <p className="login-text">로그인을 해주세요.</p>
       
-      <button className="login-btn">넥슨ID 로그인 →</button>
+      <button className="login-btn" onClick={() => navigate('/login')}>
+        로그인 →
+      </button>
       
-      <div className="login-links">
-        <div className="login-link">넥슨ID & 비밀번호 찾기</div>
-        <div className="login-link">메이플ID에 연동된 넥슨 ID 찾기</div>
-        <div className="login-link">메이플ID & 비밀번호 찾기</div>
-        <div className="login-link">회원가입</div>
-      </div>
+      <button className="login-btn signup" onClick={() => navigate('/login', { state: { isSignup: true } })}>
+        회원가입 →
+      </button>
     </div>
   );
 }

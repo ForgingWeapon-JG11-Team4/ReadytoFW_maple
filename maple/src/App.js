@@ -1,7 +1,16 @@
-import "./App.css";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MapleStoryHome from './MapleStoryHome';
+import MapleStoryLogin from './MapleStoryLogin';
 
-// 메인 앱 컴포넌트
-export default function MyApp() {
-  return <MapleStoryHome />;
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MapleStoryHome />} />
+        <Route path="/login" element={<MapleStoryLogin />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
+
+export default App;
