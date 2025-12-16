@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MapleStoryHome.css';
 
@@ -120,6 +120,25 @@ function NoticeSection() {
 
 // 5. 로그인 박스 컴포넌트
 function LoginBox() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // 로그인 상태 확인
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+    if (token && email) {
+      setUser({ email });
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    setUser(null);
+    alert('로그아웃 되었습니다.');
+  };
+
   const handleDownload = () => {
     const link = document.createElement('a');
     link.href = '/downloads/MapleStoryClient.exe';
@@ -132,18 +151,17 @@ function LoginBox() {
   const handleGameStart = () => {
     let launched = false;
 
-    const handleVisibility = () => {
-      if (document.hidden) {
-        launched = true;
-      }
+    const onBlur = () => {
+      launched = true;
+      window.removeEventListener('blur', onBlur);
     };
 
-    document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('blur', onBlur);
 
     window.location.href = "maplestory://launch";
 
     setTimeout(() => {
-      document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('blur', onBlur);
       
       if (!launched) {
         if (window.confirm("클라이언트가 설치되어 있지 않습니다.\n다운로드하시겠습니까?")) {
@@ -152,8 +170,6 @@ function LoginBox() {
       }
     }, 2000);
   };
-
-  const navigate = useNavigate();
 
   return (
     <div className="login-box">
@@ -168,18 +184,30 @@ function LoginBox() {
         다운로드 <span className="download-arrow">▼</span>
       </div>
       
-      <p className="login-text">로그인을 해주세요.</p>
-      
-      <button className="login-btn" onClick={() => navigate('/login')}>
-        로그인 →
-      </button>
-      
-      <button className="login-btn signup" onClick={() => navigate('/login', { state: { isSignup: true } })}>
-        회원가입 →
-      </button>
+      {user ? (
+        // 로그인 상태
+        <>
+          <p className="login-text">{user.email}</p>
+          <button className="login-btn" onClick={handleLogout}>
+            로그아웃
+          </button>
+        </>
+      ) : (
+        // 비로그인 상태
+        <>
+          <p className="login-text">로그인을 해주세요.</p>
+          <button className="login-btn" onClick={() => navigate('/login')}>
+            로그인 →
+          </button>
+          <button className="login-btn signup" onClick={() => navigate('/login', { state: { isSignup: true } })}>
+            회원가입 →
+          </button>
+        </>
+      )}
     </div>
   );
 }
+
 // 6. 업데이트 정보 컴포넌트
 function UpdateInfo() {
   const [currentMystic, setCurrentMystic] = useState(2);

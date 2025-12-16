@@ -14,25 +14,26 @@ export default function MapleStoryLogin() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleLogin = async () => {
-    try {
+  try {
       const res = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
       });
       
       const data = await res.json();
       
       if (res.ok) {
-        localStorage.setItem('token', data.access_token);
-        alert('로그인 성공');
-        navigate('/');
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('email', email);  // 이메일도 저장
+      alert('로그인 성공');
+      navigate('/');
       } else {
-        alert(data.message || '로그인 실패');
+      alert(data.message || '로그인 실패');
       }
-    } catch (error) {
+  } catch (error) {
       alert('서버 연결 실패');
-    }
+  }
   };
 
   const handleSignup = async () => {
