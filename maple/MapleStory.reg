@@ -1,0 +1,15 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\Classes\maplestory]
+@="URL:MapleStory Protocol"
+"URL Protocol"=""
+
+[HKEY_CURRENT_USER\Software\Classes\maplestory\DefaultIcon]
+@="C:\\Users\\ParkJiHo\\Desktop\\MapleStoryClient.exe,0"
+
+[HKEY_CURRENT_USER\Software\Classes\maplestory\shell]
+
+[HKEY_CURRENT_USER\Software\Classes\maplestory\shell\open]
+
+[HKEY_CURRENT_USER\Software\Classes\maplestory\shell\open\command]
+@="\"C:\\Users\\ParkJiHo\\Desktop\\MapleStoryClient.exe\" \"%1\""
